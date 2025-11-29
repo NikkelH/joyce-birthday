@@ -967,6 +967,42 @@ body {
     transform: scale(0.98);
 }
 
+/* Redirect Toast */
+.redirect-toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(99, 102, 241, 0.95);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 100px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+}
+
+.redirect-toast.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.redirect-icon {
+    font-size: 1.1rem;
+}
+
+.redirect-text {
+    white-space: nowrap;
+}
+
 .ticket {
     background: var(--ticket-gradient);
     border-radius: 16px;

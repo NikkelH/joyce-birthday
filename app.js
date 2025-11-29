@@ -889,6 +889,17 @@ class BirthdayApp {
             this.reset();
         });
 
+        // Ticket click -> redirect with toast
+        document.getElementById('ticket').addEventListener('click', () => {
+            this.soundManager.playClick();
+            const toast = document.getElementById('redirect-toast');
+            toast.classList.add('visible');
+
+            setTimeout(() => {
+                window.location.href = 'https://hansteeuwen.nl';
+            }, 1500);
+        });
+
         // Accept
         acceptBtn.addEventListener('click', async () => {
             if (acceptBtn.disabled) return;
