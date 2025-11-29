@@ -960,10 +960,7 @@ body {
     text-decoration: none;
     cursor: pointer;
     transition: transform 0.2s ease;
-}
-
-.ticket-link:hover {
-    transform: scale(1.02);
+    width: 100%;
 }
 
 .ticket-link:active {
