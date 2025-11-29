@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a0f">
+    <title>Laden...</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎁</text></svg>">
+</head>
+<body>
+    <!-- Particle background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <div id="app">
+        <!-- iOS Chrome Warning -->
+        <div class="screen" id="screen-ios-chrome">
+            <div class="screen-content">
+                <div class="safari-icon">🧭</div>
+                <h1 class="ios-title">Open in Safari</h1>
+                <p class="ios-subtitle">Voor de beste ervaring, open deze pagina in Safari:</p>
+                <div class="ios-steps">
+                    <div class="ios-step">
+                        <span class="step-number">1</span>
+                        <span class="step-text">Tik op <strong>ᐧᐧᐧ</strong> (rechtsonder)</span>
+                    </div>
+                    <div class="ios-step">
+                        <span class="step-number">2</span>
+                        <span class="step-text">Kies <strong>"Open in Safari"</strong></span>
+                    </div>
+                </div>
+                <div class="ios-arrow">↓</div>
+            </div>
+        </div>
+
+        <!-- Screen 0: Terminal Intro -->
+        <div class="screen active" id="screen-intro">
+            <div class="terminal-container">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-buttons">
+                            <span class="terminal-btn red"></span>
+                            <span class="terminal-btn yellow"></span>
+                            <span class="terminal-btn green"></span>
+                        </div>
+                        <div class="terminal-title">joyce_birthday.exe</div>
+                    </div>
+                    <div class="terminal-body" id="terminal-body">
+                        <div class="terminal-line" id="terminal-output"></div>
+                        <div class="terminal-cursor" id="terminal-cursor">█</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tap-to-start" id="tap-to-start">
+                <div class="tap-icon">👆</div>
+                <div class="tap-text">Tik om te starten</div>
+            </div>
+        </div>
+
+        <!-- Screen 1: Loading -->
+        <div class="screen" id="screen-loading">
+            <div class="screen-content">
+                <div class="loading-ring-container">
+                    <div class="loading-ring"></div>
+                    <div class="loading-ring-inner"></div>
+                    <div class="loading-icon">🎁</div>
+                </div>
+                <h1 class="loading-title">Cadeautje laden voor Joyce...</h1>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">0%</div>
+                </div>
+                <p class="loading-subtitle" id="loading-status">Voorbereiden...</p>
+            </div>
+        </div>
+
+        <!-- Screen 2: Error 1 -->
+        <div class="screen" id="screen-error1">
+            <div class="screen-content">
+                <div class="error-icon glitch" data-text="⚠️">⚠️</div>
+                <h1 class="error-title glitch" data-text="Er ging iets mis">Er ging iets mis</h1>
+                <div class="error-box">
+                    <div class="error-code">Foutcode: JOYCE_VERJAARDAG_2025</div>
+                    <p class="error-message">"Het cadeau is te leuk om te laden"</p>
+                </div>
+                <button class="btn btn-primary" id="btn-retry1">
+                    <span class="btn-text">Opnieuw proberen</span>
+                    <span class="btn-icon">↻</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 3: Error 2 -->
+        <div class="screen" id="screen-error2">
+            <div class="screen-content">
+                <div class="error-icon pulse">⚠️</div>
+                <h1 class="error-title">Nog steeds een probleem</h1>
+                <div class="error-box">
+                    <p class="error-message">Het systeem heeft gedetecteerd dat dit cadeau mogelijk leidt tot:</p>
+                    <ul class="error-list">
+                        <li class="error-list-item" data-delay="0">
+                            <span class="bullet">•</span> Gelach
+                        </li>
+                        <li class="error-list-item" data-delay="1">
+                            <span class="bullet">•</span> Spontane blijdschap
+                        </li>
+                        <li class="error-list-item" data-delay="2">
+                            <span class="bullet">•</span> Het moeten regelen van een oppas
+                        </li>
+                        <li class="error-list-item" data-delay="3">
+                            <span class="bullet">•</span> Een avondje uit op 27 juni 2026
+                        </li>
+                    </ul>
+                </div>
+                <p class="error-question">Doorgaan ondanks deze risico's?</p>
+                <button class="btn btn-warning" id="btn-retry2">
+                    <span class="btn-text">Ja, ik waag het</span>
+                    <span class="btn-icon">→</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 4: Error 3 (Final Warning) -->
+        <div class="screen" id="screen-error3">
+            <div class="screen-content">
+                <div class="error-icon shake">🚨</div>
+                <h1 class="error-title glitch-intense" data-text="Laatste poging">Laatste poging</h1>
+                <div class="error-box critical">
+                    <p class="error-message">Weet je het zeker?</p>
+                    <p class="error-submessage">Dit kan niet ongedaan worden gemaakt.</p>
+                </div>
+                <button class="btn btn-danger" id="btn-confirm">
+                    <span class="btn-text">Ik weet het zeker</span>
+                    <span class="btn-icon">⚡</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 5: Terms & Conditions -->
+        <div class="screen" id="screen-terms">
+            <div class="screen-content">
+                <div class="success-icon">✓</div>
+                <h1 class="terms-title">Het lijkt te werken!</h1>
+                <p class="terms-subtitle">Maar eerst: de voorwaarden</p>
+                <div class="terms-box">
+                    <p class="terms-intro">Door dit cadeau te accepteren ga je akkoord met:</p>
+                    <div class="terms-list">
+                        <label class="term-item">
+                            <input type="checkbox" class="term-checkbox" data-index="0">
+                            <span class="checkmark"></span>
+                            <span class="term-text">Dat je Hans minimaal één (1) knuffel geeft</span>
+                        </label>
+                        <label class="term-item">
+                            <input type="checkbox" class="term-checkbox" data-index="1">
+                            <span class="checkmark"></span>
+                            <span class="term-text">Dat je niet boos wordt dat hij dit geheim hield</span>
+                        </label>
+                        <label class="term-item">
+                            <input type="checkbox" class="term-checkbox" data-index="2">
+                            <span class="checkmark"></span>
+                            <span class="term-text">Dat je 27 juni 2026 vrij houdt</span>
+                        </label>
+                        <label class="term-item">
+                            <input type="checkbox" class="term-checkbox" data-index="3">
+                            <span class="checkmark"></span>
+                            <span class="term-text">Dat je toegeeft dat Hans best oké is<span class="footnote">*</span></span>
+                        </label>
+                    </div>
+                    <p class="terms-footnote">*Juridisch niet afdwingbaar maar toch</p>
+                </div>
+                <button class="btn btn-success" id="btn-accept" disabled>
+                    <span class="btn-text">Accepteren</span>
+                    <span class="btn-icon">♥</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 6: Reveal -->
+        <div class="screen" id="screen-reveal">
+            <div class="spotlight" id="spotlight"></div>
+            <div class="screen-content reveal-content">
+                <div class="reveal-header">
+                    <h1 class="reveal-title">HANS TEEUWEN</h1>
+                    <p class="reveal-subtitle">De Laffe Verlosser</p>
+                </div>
+
+                <div class="ticket" id="ticket">
+                    <div class="ticket-shine"></div>
+                    <div class="ticket-header">
+                        <div class="ticket-logo">AFAS LIVE</div>
+                        <div class="ticket-badge">E-TICKET</div>
+                    </div>
+                    <div class="ticket-main">
+                        <h2 class="ticket-artist">Hans Teeuwen</h2>
+                        <p class="ticket-show">De Laffe Verlosser</p>
+                    </div>
+                    <div class="ticket-details">
+                        <div class="ticket-detail">
+                            <span class="detail-label">Datum</span>
+                            <span class="detail-value">Za 27 juni 2026</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Tijd</span>
+                            <span class="detail-value">20:00</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Locatie</span>
+                            <span class="detail-value">AFAS Live, Amsterdam</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Vak / Rij / Stoel</span>
+                            <span class="detail-value">102 / 9 / 29</span>
+                        </div>
+                    </div>
+                    <div class="ticket-barcode">
+                        <div class="barcode"></div>
+                        <span class="barcode-number">59221009401160580003</span>
+                    </div>
+                </div>
+
+                <div class="reveal-footer">
+                    <p class="birthday-message">Gefeliciteerd met je verjaardag</p>
+                    <p class="signature">♥ Hans</p>
+                    <p class="signature-note">(je man, niet de komiek)</p>
+                    <button class="btn btn-replay" id="btn-replay">
+                        <span class="btn-text">Opnieuw afspelen</span>
+                        <span class="btn-icon">↻</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glitch overlay -->
+    <div class="glitch-overlay" id="glitch-overlay"></div>
+
+    <!-- Scanlines -->
+    <div class="scanlines"></div>
+
+    <!-- Canvas for confetti -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <script src="app.js"></script>
+</body>
+</html>
