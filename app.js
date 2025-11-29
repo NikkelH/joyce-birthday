@@ -344,6 +344,76 @@ class SoundManager {
         });
     }
 
+    // Drumroll
+    playDrumroll() {
+        if (!this.enabled || !this.audioContext) return;
+
+        const ctx = this.audioContext;
+        const duration = 2.5;
+        const masterGain = ctx.createGain();
+        masterGain.connect(ctx.destination);
+        masterGain.gain.setValueAtTime(0.15, ctx.currentTime);
+
+        // Create rapid hits that build up
+        const hitCount = 60;
+        for (let i = 0; i < hitCount; i++) {
+            const time = ctx.currentTime + (i / hitCount) * duration;
+            const progress = i / hitCount;
+
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            const filter = ctx.createBiquadFilter();
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(masterGain);
+
+            // Low drum sound
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(80 + Math.random() * 20, time);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(200 + progress * 300, time);
+
+            // Volume builds up
+            const volume = 0.3 + progress * 0.7;
+            gain.gain.setValueAtTime(volume, time);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + 0.05);
+
+            osc.start(time);
+            osc.stop(time + 0.05);
+        }
+
+        // Final cymbal crash at the end
+        setTimeout(() => {
+            const noise = ctx.createBufferSource();
+            const bufferSize = ctx.sampleRate * 0.5;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 0.3);
+            }
+
+            noise.buffer = buffer;
+
+            const noiseGain = ctx.createGain();
+            const noiseFilter = ctx.createBiquadFilter();
+
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(ctx.destination);
+
+            noiseFilter.type = 'highpass';
+            noiseFilter.frequency.setValueAtTime(3000, ctx.currentTime);
+
+            noiseGain.gain.setValueAtTime(0.3, ctx.currentTime);
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+
+            noise.start(ctx.currentTime);
+        }, duration * 1000);
+    }
+
     // Dramatic stinger for last warning
     playDramaticStinger() {
         if (!this.enabled || !this.audioContext) return;
@@ -914,31 +984,37 @@ class BirthdayApp {
                 // Activate spotlight
                 document.getElementById('spotlight').classList.add('active');
 
-                // Show header
+                // Show teaser "Je gaat naar..."
                 setTimeout(() => {
-                    document.querySelector('.reveal-header').classList.add('visible');
+                    document.getElementById('reveal-teaser').classList.add('visible');
+                    this.soundManager.playDrumroll();
                 }, 300);
 
-                // Show ticket with champagne
+                // Show HANS TEEUWEN header after drumroll
                 setTimeout(() => {
+                    document.querySelector('.reveal-header').classList.add('visible');
                     this.soundManager.playChampagne();
-                    document.getElementById('ticket').classList.add('visible');
 
                     // Confetti burst
                     setTimeout(() => {
                         this.confetti.burst(window.innerWidth / 2, window.innerHeight / 3, 100);
                     }, 200);
+                }, 3000);
+
+                // Show ticket
+                setTimeout(() => {
+                    document.getElementById('ticket').classList.add('visible');
 
                     // Confetti rain
                     setTimeout(() => {
                         this.confetti.rain(5000);
-                    }, 500);
-                }, 800);
+                    }, 300);
+                }, 3800);
 
                 // Show footer
                 setTimeout(() => {
                     document.querySelector('.reveal-footer').classList.add('visible');
-                }, 1500);
+                }, 4500);
             }, 400);
         });
     }
